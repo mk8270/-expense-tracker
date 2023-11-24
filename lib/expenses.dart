@@ -25,9 +25,25 @@ class _ExpensesState extends State<Expenses> {
     )
   ];
 
+  void bottomShetts() {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => const Text('Bottom Shetts'),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Expense Tracker App'),
+        actions: [
+          IconButton(
+            onPressed: bottomShetts,
+            icon: const Icon(Icons.add),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           const Text('chart'),
