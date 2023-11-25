@@ -11,6 +11,16 @@ class _NewExpenseState extends State<NewExpense> {
   final _textConroller = TextEditingController();
   final _amoundConroller = TextEditingController();
 
+  void datePicker() {
+    final initel = DateTime.now();
+    final firtDate = DateTime(initel.year - 1, initel.month, initel.day);
+    showDatePicker(
+        context: context,
+        initialDate: initel,
+        firstDate: firtDate,
+        lastDate: initel);
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -31,19 +41,43 @@ class _NewExpenseState extends State<NewExpense> {
               label: Text('Title'),
             ),
           ),
-          TextField(
-            controller: _amoundConroller,
-            maxLength: 10,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
-              prefixText: '\$ ',
-              label: Text('Amound'),
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _amoundConroller,
+                  maxLength: 10,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    prefixText: '\$ ',
+                    label: Text('Amound'),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text('Date Picker'),
+                    IconButton(
+                      onPressed: datePicker,
+                      icon: const Icon(Icons.calendar_month_sharp),
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
           Row(
             children: [
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context);
+                },
                 child: const Text('Cansel'),
               ),
               const Spacer(),
