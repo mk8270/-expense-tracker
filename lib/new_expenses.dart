@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:expense_tracker/model/expense.dart';
 
 class NewExpense extends StatefulWidget {
   const NewExpense({super.key});
@@ -10,15 +11,21 @@ class NewExpense extends StatefulWidget {
 class _NewExpenseState extends State<NewExpense> {
   final _textConroller = TextEditingController();
   final _amoundConroller = TextEditingController();
+  DateTime? _picketDate;
+  Gategory _pickerGatogory = Gategory.leisur;
 
-  void datePicker() {
+  void datePicker() async {
     final initel = DateTime.now();
     final firtDate = DateTime(initel.year - 1, initel.month, initel.day);
-    showDatePicker(
+    final awaitpicket = await showDatePicker(
         context: context,
         initialDate: initel,
         firstDate: firtDate,
         lastDate: initel);
+
+    setState(() {
+      _picketDate = awaitpicket;
+    });
   }
 
   @override
@@ -62,7 +69,9 @@ class _NewExpenseState extends State<NewExpense> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text('Date Picker'),
+                    Text(_picketDate == null
+                        ? 'No Date Selected'
+                        : format.format(_picketDate!)),
                     IconButton(
                       onPressed: datePicker,
                       icon: const Icon(Icons.calendar_month_sharp),
@@ -72,15 +81,40 @@ class _NewExpenseState extends State<NewExpense> {
               )
             ],
           ),
+          const SizedBox(
+            height: 16,
+          ),
           Row(
             children: [
+              DropdownButton(
+                value: _pickerGatogory,
+                items: Gategory.values
+                    .map(
+                      (e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(
+                          e.name.toUpperCase(),
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  if (value == null) {
+                    return;
+                  }
+                  setState(() {
+                    _pickerGatogory = value;
+                  });
+                  print(value);
+                },
+              ),
+              const Spacer(),
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
                 child: const Text('Cansel'),
               ),
-              const Spacer(),
               ElevatedButton(
                 onPressed: () {
                   print(_textConroller.text);
