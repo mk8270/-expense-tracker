@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:expense_tracker/model/expense.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
+  const NewExpense({super.key, required this.onAddExpense});
+
+  final void Function(Expense expense) onAddExpense;
 
   @override
   State<NewExpense> createState() => _NewExpenseState();
@@ -28,6 +30,42 @@ class _NewExpenseState extends State<NewExpense> {
     });
   }
 
+  void submiterExpense() {
+    final enterdAmound = double.tryParse(_amoundConroller.text);
+    final invalidAmound = enterdAmound == null || enterdAmound <= 0;
+    if (_textConroller.text.trim().isEmpty ||
+        invalidAmound ||
+        _picketDate == null) {
+      showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            title: const Text('Invalid Input'),
+            content: const Text(
+                'Plese make sure Entered valid Title , Amound and Date..'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                  },
+                  child: const Text('Ok'))
+            ],
+          );
+        },
+      );
+      return;
+    }
+    widget.onAddExpense(
+      Expense(
+        _pickerGatogory,
+        title: _textConroller.text,
+        amount: enterdAmound,
+        time: _picketDate!,
+      ),
+    );
+    Navigator.pop(context);
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -38,7 +76,7 @@ class _NewExpenseState extends State<NewExpense> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
       child: Column(
         children: [
           TextField(
@@ -117,8 +155,7 @@ class _NewExpenseState extends State<NewExpense> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  print(_textConroller.text);
-                  print(_amoundConroller.text);
+                  submiterExpense();
                 },
                 child: const Text('Save Expense'),
               ),

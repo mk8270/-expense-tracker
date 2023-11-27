@@ -26,10 +26,17 @@ class _ExpensesState extends State<Expenses> {
     )
   ];
 
+  void addexpense(Expense expemse) {
+    setState(() {
+      _registeredExpense.add(expemse);
+    });
+  }
+
   void bottomShetts() {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
-      builder: (ctx) => const NewExpense(),
+      builder: (ctx) => NewExpense(onAddExpense: addexpense),
     );
   }
 
