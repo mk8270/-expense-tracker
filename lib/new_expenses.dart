@@ -143,7 +143,6 @@ class _NewExpenseState extends State<NewExpense> {
                   setState(() {
                     _pickerGatogory = value;
                   });
-                  print(value);
                 },
               ),
               const Spacer(),

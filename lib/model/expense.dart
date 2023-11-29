@@ -28,3 +28,24 @@ class Expense {
     return format.format(time);
   }
 }
+
+class ExpenseBucket {
+  ExpenseBucket({required this.gategory, required this.expenses});
+
+  ExpenseBucket.forSinlgeGategory(List<Expense> allExpenseList, this.gategory)
+      : expenses = allExpenseList.where((element) {
+          return element.gategory == gategory;
+        }).toList();
+
+  final Gategory gategory;
+  final List<Expense> expenses;
+
+  double get totalExpense {
+    double sum = 0;
+    for (final expesns in expenses) {
+      sum += expesns.amount;
+    }
+
+    return sum;
+  }
+}
